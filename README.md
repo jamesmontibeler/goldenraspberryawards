@@ -87,6 +87,10 @@ Erros durante a validação das colunas serão registrados na saída do console 
 Erros durante a validação de cada registro do arquivo serão registrados na saída do console como log de erro e a importação irá pular para o próximo registro.
 O início e fim da importação será registrado na saída do console como log de info, informando o nome do arquivo sendo importado e a quantidade de registros importada com sucesso (sem erros).
 
+### Inicalização
+
+Rodar a classe GoldenraspberryawardsapiApplication como Spring Boot App ou Java Application.
+
 ## Endpoints
 
 ### /awardinterval
