@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,8 @@ public class LoadDataService {
 	@EventListener(ApplicationReadyEvent.class)
 	public void loadDataFromFile() throws IOException, FileNotFoundException {
 
-		if (dataFileCvs.trim().isEmpty()) {
+		if (Strings.isBlank(dataFileCvs)) {
+			logger.info("No file to import! Environment variable DATA_FILE_CVS is empty.");
 			return;
 		}
 			

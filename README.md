@@ -71,7 +71,7 @@ winner: formato string, com valores "yes", "no" ou "". Campo opcional.
 
 
 * Spring Tool Suite 4.13.0.RELEASE 
-* Java 11
+* Java 17
 * Banco de dados H2, com armazenamento em memória (dados são perdidos ao fechar a API).
 
 ## Inicialização da API

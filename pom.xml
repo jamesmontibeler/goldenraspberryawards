@@ -14,7 +14,7 @@
 	<name>goldenraspberryawardsapi</name>
 	<description>Teste Seleção Texo IT</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
