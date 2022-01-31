@@ -76,6 +76,10 @@ winner: formato string, com valores "yes", "no" ou "". Campo opcional.
 
 ## Inicialização da API
 
+### Inicalização
+
+Rodar a classe GoldenraspberryawardsapiApplication como Spring Boot App ou Java Application.
+
 ### Environment variables
 
 * **DATA_FILE_CVS**: A variável de ambiente "DATA_FILE_CVS" permite informar o diretório e nome de uma fonte de dados em formato ".CSV", conforme especificado no teste. O diretório deve ser informada junto com o nome do arquivo, conforme exemplo: "C:/dadosimportacao/movielist.csv". Caso essa variável de ambiente não seja informada o sistema irá incializar sem realizar a importação de dados.
@@ -86,10 +90,6 @@ Ao importar um arquivo .CVS (conforme definido  acima na variável de ambiente e
 Erros durante a validação das colunas serão registrados na saída do console como log de erro e a importação do arquivo será interrompida.
 Erros durante a validação de cada registro do arquivo serão registrados na saída do console como log de erro e a importação irá pular para o próximo registro.
 O início e fim da importação será registrado na saída do console como log de info, informando o nome do arquivo sendo importado e a quantidade de registros importada com sucesso (sem erros).
-
-### Inicalização
-
-Rodar a classe GoldenraspberryawardsapiApplication como Spring Boot App ou Java Application.
 
 ## Endpoints
 
