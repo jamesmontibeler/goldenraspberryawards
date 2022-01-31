@@ -28,6 +28,8 @@ import com.texoit.goldenraspberryawards.service.producer.ProducerService;
 
 @Service
 public class LoadDataService {
+	
+	private static final String DATA_FILE_CSV =  System.getenv("DATA_FILE_CSV");
 
 	@Autowired
 	protected MovieService movieService;
@@ -41,22 +43,18 @@ public class LoadDataService {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private String dataFileCvs;	
-	
-
 	public LoadDataService() {
-		dataFileCvs = System.getenv("DATA_FILE_CVS");
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void loadDataFromFile() throws IOException, FileNotFoundException {
 
-		if (Strings.isBlank(dataFileCvs)) {
-			logger.info("No file to import! Environment variable DATA_FILE_CVS is empty.");
+		if (Strings.isBlank(DATA_FILE_CSV)) {
+			logger.info("No file to import! Environment variable DATA_FILE_CSV is empty.");
 			return;
 		}
 			
-		logger.info("Starting file import: {}", dataFileCvs);			
+		logger.info("Starting file import: {}", DATA_FILE_CSV);			
 		
 	    BufferedReader br = null;
 	    String line = "";
@@ -64,7 +62,7 @@ public class LoadDataService {
 	    boolean gotColumns = false;
 	    long qtdMovies = 0;
 	    try {
-	        br = new BufferedReader(new FileReader(dataFileCvs));
+	        br = new BufferedReader(new FileReader(DATA_FILE_CSV));
 	        while ((line = br.readLine()) != null) {
 
 	        	String[] values = line.split(csvDivisor);
@@ -75,7 +73,7 @@ public class LoadDataService {
 	        	  }
 	        	  gotColumns = true;
 	        	} else {
-	        		Optional<Movie> optMovie = cvsToMovie(values);
+	        		Optional<Movie> optMovie = csvToMovie(values);
 					if (optMovie.isPresent()) {						
 					    qtdMovies++;
 					}	
@@ -106,10 +104,10 @@ public class LoadDataService {
 		return true;
 	}
 	
-	private Optional<Movie> cvsToMovie(String[] values) {
+	private Optional<Movie> csvToMovie(String[] values) {
 		
 		if ((COLUMNS.length > (values.length + 1)) || (COLUMNS.length < values.length)) { //it's possible for the last value did'nt exists
-			logger.error("Qty of values entered is incompatible with qty. of columns: was expected '{}' but was found '{}'. Unable to merge record {}.", COLUMNS.length, values.length, movieCvsToString(values));
+			logger.error("Qty of values entered is incompatible with qty. of columns: was expected '{}' but was found '{}'. Unable to merge record {}.", COLUMNS.length, values.length, movieCsvToString(values));
 			return Optional.empty();
 		}
 		
@@ -117,7 +115,7 @@ public class LoadDataService {
 		try {
 			movie.setYear(Integer.valueOf(values[0]));
 		} catch (Exception e) {
-			logger.error("Column '{}' was not informed with numeric value. Value informed: '{}'. Unable to merge record {}", COLUMNS[0], values[0], movieCvsToString(values));
+			logger.error("Column '{}' was not informed with numeric value. Value informed: '{}'. Unable to merge record {}", COLUMNS[0], values[0], movieCsvToString(values));
 			return Optional.empty();
 		}	
 				
@@ -127,7 +125,7 @@ public class LoadDataService {
 		if (values.length > 4) { //it's possible for the last value did'nt exists	
 			
 			if (!WINNER_COLUMN_VALUES.contains(values[4].toLowerCase())) {
-				logger.error("Column '{}' was informed with invalid value: was expected [{}] but was found '{}'. Unable to merge record {}", COLUMNS[4], WINNER_COLUMN_VALUES, values[4], movieCvsToString(values));
+				logger.error("Column '{}' was informed with invalid value: was expected [{}] but was found '{}'. Unable to merge record {}", COLUMNS[4], WINNER_COLUMN_VALUES, values[4], movieCsvToString(values));
 				return Optional.empty();
 			}
 			
@@ -137,18 +135,18 @@ public class LoadDataService {
 		}		
 					
 		try {
-			movie.setProducers(cvsToProducer(values[3]));
+			movie.setProducers(csvToProducer(values[3]));
 			
 			movie = movieService.save(movie);
 		} catch (Exception e) {
-			logger.error("{}. Unable to merge registry {}", e.getMessage(), movieCvsToString(values));
+			logger.error("{}. Unable to merge registry {}", e.getMessage(), movieCsvToString(values));
 			return Optional.empty();
 		}
 				
 		return Optional.of(movie); 
 	}	
 	
-	private Set<Producer> cvsToProducer(String names) {
+	private Set<Producer> csvToProducer(String names) {
 		List<String> listNames = this.splitNames(names);
 		Set<Producer> producers = new HashSet<>();
 		for (String name : listNames) {
@@ -175,7 +173,7 @@ public class LoadDataService {
 		return splited;
 	}
 
-	private String movieCvsToString(String[] values) {
+	private String movieCsvToString(String[] values) {
 		Map<String, String> map = new HashMap<>();
 		for (int i = 0; i < COLUMNS.length; i++) {
 			map.put(COLUMNS[i], values.length > i ? values[i] : "");

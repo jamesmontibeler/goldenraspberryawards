@@ -82,7 +82,7 @@ Rodar a classe GoldenraspberryawardsapiApplication como Spring Boot App ou Java 
 
 ### Environment variables
 
-* **DATA_FILE_CVS**: A variável de ambiente "DATA_FILE_CVS" permite informar o diretório e nome de uma fonte de dados em formato ".CSV", conforme especificado no teste. O diretório deve ser informada junto com o nome do arquivo, conforme exemplo: "C:/dadosimportacao/movielist.csv". Caso essa variável de ambiente não seja informada o sistema irá incializar sem realizar a importação de dados.
+* **DATA_FILE_CSV**: A variável de ambiente "DATA_FILE_CSV" permite informar o diretório e nome de uma fonte de dados em formato ".CSV", conforme especificado no teste. O diretório deve ser informada junto com o nome do arquivo, conforme exemplo: "C:/dadosimportacao/movielist.csv". Caso essa variável de ambiente não seja informada o sistema irá incializar sem realizar a importação de dados.
 
 ### Importação de dados
 
