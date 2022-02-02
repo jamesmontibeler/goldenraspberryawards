@@ -11,17 +11,18 @@ import com.texoit.goldenraspberryawards.domain.BaseRepository;
 public interface ProducerRepository extends BaseRepository<Producer, UUID> {
 	
 	public Iterable<Producer> findByNameIgnoreCase(String name);
+
 	
 	@Query(value = "SELECT p.* "
 			+ "FROM Producer p  "
 			+ "INNER JOIN Movie_Producer mp ON p.ID = mp.producer_id "
 			+ "INNER JOIN Movie m ON m.ID = MP.movie_id "
 			+ "WHERE "
-			+ "m.winner = TRUE "
-			+ "GROUP BY p.name "
+			+ "m.winner = TRUE "			
+			+ "GROUP BY p.name "			
 			+ "HAVING COUNT(m.ID) > 1 ", nativeQuery = true)
 	public List<Producer> findProducersWithMoreThanOneAward();
-	
+	 
 	@Query(value ="SELECT m.year "
 			+ "FROM Producer p  "
 			+ "INNER JOIN Movie_Producer mp ON p.ID = mp.producer_id "

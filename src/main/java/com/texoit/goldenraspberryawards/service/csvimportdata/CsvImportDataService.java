@@ -1,7 +1,6 @@
-package com.texoit.goldenraspberryawards.service.loaddata;
+package com.texoit.goldenraspberryawards.service.csvimportdata;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import com.texoit.goldenraspberryawards.service.movie.MovieService;
 import com.texoit.goldenraspberryawards.service.producer.ProducerService;
 
 @Service
-public class LoadDataService {
+public class CsvImportDataService {
 	
 	private static final String DATA_FILE_CSV =  System.getenv("DATA_FILE_CSV");
 
@@ -40,52 +39,76 @@ public class LoadDataService {
 	private static final String[] COLUMNS = {"year", "title", "studios", "producers", "winner"};
 	private static final String YES = "yes";
 	private static final List<String> WINNER_COLUMN_VALUES = List.of(YES, "no", "");
-
+		
 	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
+	private String dataFileCsvName;
+	private Long qtyImportedRecords; 
+	
 
-	public LoadDataService() {
+	public CsvImportDataService() {
+		dataFileCsvName = DATA_FILE_CSV;
+		qtyImportedRecords = 0L;
+	}	
+
+	public String getDataFileCsvName() {
+		return dataFileCsvName;
+	}
+
+	public void setDataFileCsvName(String dataFileCsvName) {
+		this.dataFileCsvName = dataFileCsvName;
+	}
+	
+	public Long getQtyImportedRecords() {
+		return qtyImportedRecords;
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
-	public void loadDataFromFile() throws IOException, FileNotFoundException {
+	public void importDataFromFile()  {
 
-		if (Strings.isBlank(DATA_FILE_CSV)) {
+		if (Strings.isBlank(dataFileCsvName)) {
 			logger.info("No file to import! Environment variable DATA_FILE_CSV is empty.");
 			return;
 		}
 			
-		logger.info("Starting file import: {}", DATA_FILE_CSV);			
+		logger.info("Starting file import: {}", dataFileCsvName);			
 		
 	    BufferedReader br = null;
 	    String line = "";
 	    String csvDivisor = ";";
 	    boolean gotColumns = false;
 	    long qtdMovies = 0;
+	    
 	    try {
-	        br = new BufferedReader(new FileReader(DATA_FILE_CSV));
-	        while ((line = br.readLine()) != null) {
-
-	        	String[] values = line.split(csvDivisor);
-	        	if (!gotColumns) {
-	        	  String[] columns = values;
-	        	  if (!checkColumns(columns)) {
-	        		  break;
-	        	  }
-	        	  gotColumns = true;
-	        	} else {
-	        		Optional<Movie> optMovie = csvToMovie(values);
-					if (optMovie.isPresent()) {						
-					    qtdMovies++;
-					}	
-	        	}	        	 
-	        }	   
-	    } finally {
-	        if (br != null) {
-	            br.close();
-	        }
-	    }	
-
+	    	try {
+		    	br = new BufferedReader(new FileReader(dataFileCsvName));
+		    	
+		        while ((line = br.readLine()) != null) {	
+		        	String[] values = line.split(csvDivisor);
+		        	if (!gotColumns) {
+		        	  String[] columns = values;
+		        	  if (!checkColumns(columns)) {
+		        		  break;
+		        	  }
+		        	  gotColumns = true;
+		        	} else {
+		        		Optional<Movie> optMovie = csvToMovie(values);
+						if (optMovie.isPresent()) {						
+						    qtdMovies++;
+						}	
+		        	}	        	 
+		        }	
+		    } finally {
+		        if (br != null) {
+		            br.close();
+		        }
+		    }	
+		} catch (IOException e) {
+			logger.error("Wasn't possible open the file.", e);	
+		}
+	    
 	    logger.info("Qty imported movies: {}", qtdMovies);
+	    qtyImportedRecords = qtdMovies;
 
 	}
 

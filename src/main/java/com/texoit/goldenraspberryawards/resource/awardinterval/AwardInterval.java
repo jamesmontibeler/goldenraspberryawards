@@ -1,4 +1,4 @@
-package com.texoit.goldenraspberryawards.resource.award;
+package com.texoit.goldenraspberryawards.resource.awardinterval;
 
 import java.util.Set;
 

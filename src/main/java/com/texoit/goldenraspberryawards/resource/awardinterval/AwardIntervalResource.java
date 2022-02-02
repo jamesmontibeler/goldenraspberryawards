@@ -1,4 +1,4 @@
-package com.texoit.goldenraspberryawards.resource.award;
+package com.texoit.goldenraspberryawards.resource.awardinterval;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +23,7 @@ public class AwardIntervalResource {
 	protected ProducerService service;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<AwardInterval> findAll() {
+	public ResponseEntity<AwardInterval> getAwardInterval() {
 		CacheControl cacheControl = CacheControl.maxAge(cacheMaxAgeInMinutes, TimeUnit.MINUTES);		
 		return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(service.getAwardInterval());
 	}
