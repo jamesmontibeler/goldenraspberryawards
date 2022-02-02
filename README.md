@@ -86,10 +86,10 @@ Rodar a classe GoldenraspberryawardsapiApplication como Spring Boot App ou Java 
 
 ### Importação de dados
 
-Ao importar um arquivo .CVS (conforme definido  acima na variável de ambiente e nas específicações do teste), serão validadas a quantidade de colunas do arquivo (que devem estar nomeadas na primeira linha do arquivo) e o nome das mesmas. Cada registro do arquivo será validado individualmente, considerando o tipo de dado e se o mesmo é obrigatório ou não (confome específicações do teste acima).
+Ao importar um arquivo .CSV (conforme definido  acima na variável de ambiente e nas específicações do teste), serão validadas a quantidade de colunas do arquivo (que devem estar nomeadas na primeira linha do arquivo) e o nome das mesmas. Cada registro do arquivo será validado individualmente, considerando o tipo de dado e se o mesmo é obrigatório ou não (confome específicações do teste acima).
 Erros durante a validação das colunas serão registrados na saída do console como log de erro e a importação do arquivo será interrompida.
 Erros durante a validação de cada registro do arquivo serão registrados na saída do console como log de erro e a importação irá pular para o próximo registro.
-O início e fim da importação será registrado na saída do console como log de info, informando o nome do arquivo sendo importado e a quantidade de registros importada com sucesso (sem erros).
+O início e fim da importação serão registrados na saída do console como log de info, informando o nome do arquivo sendo importado e a quantidade de registros importada com sucesso (sem erros).
 
 ## Endpoints
 
