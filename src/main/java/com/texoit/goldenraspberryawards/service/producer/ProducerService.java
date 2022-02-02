@@ -3,6 +3,7 @@ package com.texoit.goldenraspberryawards.service.producer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -51,10 +52,7 @@ public class ProducerService extends BaseCrudService<UUID, Producer, ProducerRep
 			AwardIntervalDetail aid = new AwardIntervalDetail();
 			aid.setProducer(producer.getName());		
 			List<Integer> years = repository.findYearOfProducerMovies(producer.getId().toString());
-			aid = getInterval(aid, years, intervalType);
-			if (!ObjectUtils.isEmpty(aid)) { 
-				awardIntervalSet.add(aid);
-			}
+			Optional.of(getInterval(aid, years, intervalType)).ifPresent(o -> awardIntervalSet.add(o));
 		}
 		Function<List<Integer>, Integer> comparator = IntervalType.SHORTEST.equals(intervalType) ? Collections::min : Collections::max;
 		Integer shortestInterval = comparator.apply(awardIntervalSet.stream().map(AwardIntervalDetail::getInterval).collect(Collectors.toList()));
